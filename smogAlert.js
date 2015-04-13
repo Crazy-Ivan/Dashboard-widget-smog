@@ -8,7 +8,7 @@ angular.module('widget')
             editTemplate: 'Dashboard-widget-smog/smogAlertEdit.html',
             dataBind: {
                 type: 'external',
-                source: 'http://smogalert.pl/api/stats/krakow-krasinskiego',
+                source: 'http://powietrze.malopolska.pl/data/data.php?type=smartmeasurement&city=krakow&location=krasinskiego&parameter=caqi',
                 interval: 600000
             }
         });

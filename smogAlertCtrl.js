@@ -4,13 +4,12 @@ angular.module('widget')
         var chartData = [];
 
         $scope.chartData = function() {
-            var pollutant =  $scope.options.data.pollutants[2].normPercent,
+            var pollutant =  parseInt($scope.widget.data[0].value, 10),
                 space = 100 - pollutant,
-                color = '#89ae0d';
+                color = $scope.widget.data[0].caqicolor;
 
             if(space < 0) {
                 space = 0;
-                color = '#ec1414';
             }
 
             chartData.length = 0;
@@ -33,19 +32,23 @@ angular.module('widget')
         var stationCollection = $collection.getInstance();
 
         stationCollection.addAll([
-            {address: 'Al.Krasińskiego', city: 'Kraków', 'url': 'http://smogalert.pl/api/stats/krakow-krasinskiego'},
-            {address: 'ul. Bulwarowa', city: 'Kraków', 'url': 'http://smogalert.pl/api/stats/krakow-bulwarowa'},
-            {address: 'ul. Bujaka', city: 'Kraków', 'url': 'http://smogalert.pl/api/stats/krakow-bujaka'}
+            {address: 'Al.Krasińskiego', city: 'Kraków', 'url': getUrl('krasinskiego')},
+            {address: 'ul. Bulwarowa', city: 'Kraków', 'url': getUrl('bulwarowa')},
+            {address: 'ul. Bujaka', city: 'Kraków', 'url': getUrl('bujaka')}
         ]);
 
-        $scope.station = $scope.options.dataBind.source;
+        $scope.station = $scope.widget.options.dataBind.source;
 
         $scope.stations = stationCollection.all();
 
         $scope.save = function() {
-            $scope.options.dataBind.source = $scope.station;
-            $scope.options.getData().then(function() {
-            $scope.options.flip = false;
+            $scope.widget.options.dataBind.source = $scope.station;
+            $scope.widget.getData().then(function() {
+            $scope.widget.flip();
             });
         };
+
+        function getUrl(location) {
+            return 'http://powietrze.malopolska.pl/data/data.php?type=smartmeasurement&city=krakow&location=' + location + '&parameter=caqi';
+        }
     }]);
